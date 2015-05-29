@@ -25,7 +25,8 @@ enyo.kind({
         onInAnimationStart: "", // Fired after the in animation has started
         onOutAnimationStart: "", // Fired after the out animation has started
         onInAnimationEnd: "", // Fired after the in animation has ended
-        onOutAnimationEnd: "" // Fired after the out animation has ended
+        onOutAnimationEnd: "", // Fired after the out animation has ended
+        onSelectedChange: ''
     },
     published: {
         async: false, // If true, the in and out animations will be decoupled
@@ -33,7 +34,11 @@ enyo.kind({
         outAnim: "slideOutToLeft", // Name of the CSS animation to use of the out animation
         duration: 500, // Duration to use for animations in ms
         easing: "ease", // Timing function to use for animations
+        previous: null,
         selected: null
+    },
+    selectedChanged: function() {
+      this.doSelectedChange();
     },
     create: function() {
         this.inherited(arguments);
@@ -248,6 +253,7 @@ enyo.kind({
             this.startInAnimation();
         }
         
+        this.set('previous', this.oldPanel);
         this.set("selected", panel);
     },
     /**
@@ -266,6 +272,8 @@ enyo.kind({
         if (this.selected) {
             this.selected.hide();
         }
+
+        this.set('previous', this.selected);
         this.set("selected", panel);
     },
     /**
